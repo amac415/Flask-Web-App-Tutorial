@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}Clients{% endblock %}
+{% block content %}
+
+<style>
+  body {
+    background-color: #f4f4e6;
+  }
+
+  .header {
+    background-color: #6f8152;
+    color: white;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+
+  .logo {
+    font-weight: bold;
+    font-size: 20px;
+  }
+
+  .container-box {
+    background: white;
+    margin: 0 auto 40px auto;
+    padding: 30px;
+    max-width: 900px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .btn-add {
+    background-color: #6f8152;
+    color: white;
+  }
+
+  .btn-add:hover {
+    background-color: #5a6945;
+  }
+
+  table th,
+  table td {
+    vertical-align: middle;
+  }
+</style>
+
+<div class="container container-box">
+  <div class="header">
+    <div class="logo">
+      Go Kids, Inc.
+      <small style="font-size: 12px;">SYSTEMIZED PEDIATRIC CHIROPRACTIC</small>
+    </div>
+    <div>Welcome, {{ user.first_name }}</div>
+  </div>
+
+  <h3>Client Information</h3>
+
+  <div class="d-flex justify-content-between my-3">
+    <input type="text" class="form-control w-50" placeholder="Search">
+    <button class="btn btn-add">+ Add New Client</button>
+  </div>
+
+  <table class="table table-bordered table-striped">
+    <thead class="table-light">
+      <tr>
+        <th>Client ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Date of Birth</th>
+        <th>Email</th>
+        <th>Assigned Staff</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for client in clients %}
+      <tr>
+        <td>{{ client.id }}</td>
+        <td>{{ client.first_name }}</td>
+        <td>{{ client.last_name }}</td>
+        <td>{{ client.dob }}</td>
+        <td>{{ client.email }}</td>
+        <td>{{ client.staff }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

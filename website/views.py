@@ -35,3 +35,13 @@ def delete_note():
             db.session.commit()
 
     return jsonify({})
+
+@views.route('/clients')
+@login_required
+def clients():
+    # Example static data — replace this with a real database query
+    clients = [
+        {'id': 1, 'first_name': 'Alice', 'last_name': 'Smith', 'dob': '01/01/2010', 'email': 'alice@example.com', 'staff': 'Dr. Green'},
+        {'id': 2, 'first_name': 'Bob', 'last_name': 'Johnson', 'dob': '03/15/2011', 'email': 'bob@example.com', 'staff': 'Dr. Lee'},
+    ]
+    return render_template("clients.html", clients=clients, user=current_user)
