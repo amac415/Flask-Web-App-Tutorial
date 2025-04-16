@@ -16,3 +16,12 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(150))
     first_name = db.Column(db.String(150))
     notes = db.relationship('Note')
+
+class Client(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(150), nullable=False)
+    last_name = db.Column(db.String(150), nullable=False)
+    dob = db.Column(db.String(50))
+    email = db.Column(db.String(150))
+    staff = db.Column(db.String(150))
+
