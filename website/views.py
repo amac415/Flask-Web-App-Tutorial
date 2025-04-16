@@ -28,7 +28,7 @@ from .models import Client
 
 @views.route('/', methods=['GET', 'POST'])
 @login_required
-def clients():
+def home():
     if request.method == 'POST':
         first_name = request.form.get('first_name')
         last_name = request.form.get('last_name')
