@@ -56,6 +56,7 @@
           {% if user.is_authenticated %}
           <a class="nav-item nav-link" href="/">Home</a>
           <a class="nav-item nav-link" href="/">Clients</a>
+          <a class="nav-item nav-link" href="{{ url_for('views.settings') }}">Settings</a>
           {% if user.role == 'admin' %}
           <a class="nav-item nav-link" href="{{ url_for('admin.users') }}">Admin Panel</a>
           {% endif %}

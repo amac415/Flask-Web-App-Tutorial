@@ -49,3 +49,15 @@ def reset_password(user_id):
     return render_template('admin/reset_password.html',
                            user_to_reset=user_to_reset,
                            user=current_user)
+@admin_bp.route('/delete-user/<int:user_id>', methods=['POST'])
+@login_required
+@admin_required
+def delete_user(user_id):
+    user = User.query.get_or_404(user_id)
+    if user.role == 'admin':
+        flash("Cannot delete an admin account.", "error")
+    else:
+        db.session.delete(user)
+        db.session.commit()
+        flash(f"Deleted {user.email}", "success")
+    return redirect(url_for('admin.users'))

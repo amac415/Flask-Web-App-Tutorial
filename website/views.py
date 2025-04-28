@@ -5,11 +5,34 @@ from . import db
 import json
 from .models import Client
 from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for
-
+from werkzeug.security import generate_password_hash
 
 views = Blueprint('views', __name__)
 
-
+@views.route('/settings', methods=['GET', 'POST'])
+@login_required
+def settings():
+    if request.method == 'POST':
+        first_name = request.form.get('first_name')
+        pw1 = request.form.get('password1')
+        pw2 = request.form.get('password2')
+        # Validate name
+        if len(first_name) < 2:
+            flash('Name must be at least 2 characters.', 'error')
+            return redirect(url_for('views.settings'))
+        current_user.first_name = first_name
+        # Handle password change if provided
+        if pw1 or pw2:
+            if pw1 != pw2:
+                flash("Passwords don't match.", 'error')
+                return redirect(url_for('views.settings'))
+            if len(pw1) < 7:
+                flash('Password must be at least 7 characters.', 'error')
+                return redirect(url_for('views.settings'))
+            current_user.password = generate_password_hash(pw1, method='pbkdf2:sha256')
+        db.session.commit()
+        flash('Settings saved!', 'success')
+    return render_template('settings.html', user=current_user)
 
 
 @views.route('/delete-note', methods=['POST'])

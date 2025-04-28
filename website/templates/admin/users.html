@@ -46,6 +46,14 @@
              class="btn btn-sm btn-warning">
             Reset Password
           </a>
+          <form method="POST"
+            action="{{ url_for('admin.delete_user', user_id=u.id) }}"
+            style="display:inline;">
+        <button class="btn btn-sm btn-danger"
+                onclick="return confirm('Delete this user?');">
+          Delete User
+        </button>
+      </form>
         </td>
       </tr>
       {% else %}
