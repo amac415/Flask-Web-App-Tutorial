@@ -18,6 +18,7 @@
           <form method="POST" action="{{ url_for('admin.reject_user', user_id=u.id) }}" style="display:inline;">
             <button class="btn btn-sm btn-danger">Reject</button>
           </form>
+          <a href="{{ url_for('admin.reset_password', user_id=u.id) }}" class="btn btn-sm btn-warning">Reset Password</a>
         </td>
       </tr>
       {% else %}
@@ -28,16 +29,29 @@
 
   <h4>Approved Employees</h4>
   <table class="table">
-    <thead><tr><th>Email</th><th>Name</th></tr></thead>
+    <thead>
+      <tr>
+        <th>Email</th>
+        <th>Name</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
     <tbody>
       {% for u in employees %}
       <tr>
         <td>{{ u.email }}</td>
         <td>{{ u.first_name }}</td>
+        <td>
+          <a href="{{ url_for('admin.reset_password', user_id=u.id) }}"
+             class="btn btn-sm btn-warning">
+            Reset Password
+          </a>
+        </td>
       </tr>
       {% else %}
-      <tr><td colspan="2">No employees yet.</td></tr>
+      <tr><td colspan="3">No employees yet.</td></tr>
       {% endfor %}
     </tbody>
   </table>
+
 {% endblock %}
