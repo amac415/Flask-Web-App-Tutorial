@@ -41,7 +41,11 @@ def home():
         db.session.commit()
         flash('New client added!', category='success')
 
-    clients = Client.query.all()
+    if current_user.role == 'admin':
+        clients = Client.query.all()
+    else:
+        clients = Client.query.filter_by(staff=current_user.first_name).all()
+
     return render_template("clients.html", clients=clients, user=current_user)
 
 @views.route('/delete-client', methods=['POST'])

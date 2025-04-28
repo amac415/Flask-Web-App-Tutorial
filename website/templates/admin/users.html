@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}User Management{% endblock %}
+{% block content %}
+  <h2>User Management</h2>
+
+  <h4>Pending Accounts</h4>
+  <table class="table">
+    <thead><tr><th>Email</th><th>Name</th><th>Actions</th></tr></thead>
+    <tbody>
+      {% for u in pending %}
+      <tr>
+        <td>{{ u.email }}</td>
+        <td>{{ u.first_name }}</td>
+        <td>
+          <form method="POST" action="{{ url_for('admin.approve_user', user_id=u.id) }}" style="display:inline;">
+            <button class="btn btn-sm btn-success">Approve</button>
+          </form>
+          <form method="POST" action="{{ url_for('admin.reject_user', user_id=u.id) }}" style="display:inline;">
+            <button class="btn btn-sm btn-danger">Reject</button>
+          </form>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="3">No pending accounts.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h4>Approved Employees</h4>
+  <table class="table">
+    <thead><tr><th>Email</th><th>Name</th></tr></thead>
+    <tbody>
+      {% for u in employees %}
+      <tr>
+        <td>{{ u.email }}</td>
+        <td>{{ u.first_name }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="2">No employees yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

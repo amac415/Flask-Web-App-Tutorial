@@ -1,7 +1,10 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from os import path
-from flask_login import LoginManager
+from flask_login import LoginManager, current_user
+
+
+
 
 
 
@@ -17,9 +20,11 @@ def create_app():
 
     from .views import views
     from .auth import auth
+    from .admin import admin_bp
 
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
+    app.register_blueprint(admin_bp)
 
     from .models import User, Note
     
@@ -34,6 +39,10 @@ def create_app():
     @login_manager.user_loader
     def load_user(id):
         return User.query.get(int(id))
+    
+    @app.context_processor
+    def inject_user():
+        return dict(user=current_user)
 
     return app
 
@@ -42,3 +51,8 @@ def create_database(app):
     if not path.exists('website/' + DB_NAME):
         db.create_all(app=app)
         print('Created Database!')
+        
+
+
+
+

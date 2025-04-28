@@ -17,6 +17,9 @@ def login():
         user = User.query.filter_by(email=email).first()
         if user:
             if check_password_hash(user.password, password):
+                if user.role != 'admin' and not user.approved:
+                    flash('Your account is awaiting admin approval.', category='error')
+                    return redirect(url_for('auth.login'))
                 flash('Logged in successfully!', category='success')
                 login_user(user, remember=True)
                 return redirect(url_for('views.home'))
@@ -55,12 +58,17 @@ def sign_up():
         elif len(password1) < 7:
             flash('Password must be at least 7 characters.', category='error')
         else:
-            new_user = User(email=email, first_name=first_name, 
-                            password=generate_password_hash(password1, method='pbkdf2:sha256'))
+            new_user = User(
+                email=email,
+                first_name=first_name,
+                password=generate_password_hash(password1, method='pbkdf2:sha256'),
+                role='employee',
+                approved=False
+            )
             db.session.add(new_user)
             db.session.commit()
-            login_user(new_user, remember=True)
-            flash('Account created!', category='success')
-            return redirect(url_for('views.home'))
+            flash('Account created! Awaiting admin approval.', category='success')
+            return redirect(url_for('auth.login'))
+        
 
     return render_template("sign_up.html", user=current_user)
