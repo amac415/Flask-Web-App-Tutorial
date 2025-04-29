@@ -53,13 +53,23 @@ from .models import Client
 @login_required
 def home():
     if request.method == 'POST':
-        first_name = request.form.get('first_name')
-        last_name = request.form.get('last_name')
-        dob = request.form.get('dob')
-        email = request.form.get('email')
-        staff = request.form.get('staff')
+        child_name   = request.form.get('child_name')
+        parent_name  = request.form.get('parent_name')
+        age          = int(request.form.get('age') or 0)
+        email        = request.form.get('email')
+        phone        = request.form.get('phone')
+        county       = request.form.get('county')
+        working_with = request.form.get('working_with')
 
-        new_client = Client(first_name=first_name, last_name=last_name, dob=dob, email=email, staff=staff)
+        new_client = Client(
+        child_name=child_name,
+        parent_name=parent_name,
+        age=age,
+        email=email,
+        phone=phone,
+        county=county,
+        working_with=working_with
+    )
         db.session.add(new_client)
         db.session.commit()
         flash('New client added!', category='success')

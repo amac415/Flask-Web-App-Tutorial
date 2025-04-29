@@ -21,9 +21,12 @@ class User(db.Model, UserMixin):
 
 class Client(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(150), nullable=False)
-    last_name = db.Column(db.String(150), nullable=False)
-    dob = db.Column(db.String(50))
-    email = db.Column(db.String(150))
-    staff = db.Column(db.String(150))
+    child_name   = db.Column(db.String(150), nullable=False)
+    parent_name  = db.Column(db.String(150), nullable=False)
+    age          = db.Column(db.Integer, nullable=False)
+    email        = db.Column(db.String(150), nullable=False)
+    phone        = db.Column(db.String(50))
+    county       = db.Column(db.String(100))
+    working_with = db.Column(db.String(150))
+
 

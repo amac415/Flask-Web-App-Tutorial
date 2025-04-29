@@ -1,4 +1,5 @@
 flask
 Flask-SQLAlchemy
 flask-login
-Flask-Mail
+psycopg2-binary
+python-dotenv
