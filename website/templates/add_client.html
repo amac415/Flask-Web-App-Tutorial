@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+{% block title %}Add New Client{% endblock %}
+{% block content %}
+<style>
+  /* Theme overrides for Go Kids */
+  .card-header.gokids-header {
+    background-color: #74805e;
+    color: white;
+  }
+  .btn-gokids {
+    background-color: #74805e;
+    color: white;
+    border: none;
+  }
+  .btn-gokids:hover {
+    background-color: #657152;
+  }
+</style>
+
+<div class="container my-5">
+  <h2 class="mb-4" style="color:#555;">Add New Client</h2>
+  <form method="POST">
+
+    <!-- Parent / Guardian Information -->
+    <div class="card mb-4">
+      <div class="card-header gokids-header">Parent / Guardian Information</div>
+      <div class="card-body">
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label>Parent Name *</label>
+            <input type="text" name="parent_name" class="form-control" value="{{ request.form.get('parent_name','') }}">
+          </div>
+          <div class="form-group col-md-6">
+            <label>Email *</label>
+            <input type="email" name="email" class="form-control" value="{{ request.form.get('email','') }}">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-8">
+            <label>Address *</label>
+            <input type="text" name="address" class="form-control" value="{{ request.form.get('address','') }}">
+          </div>
+          <div class="form-group col-md-4">
+            <label>Zip Code *</label>
+            <input type="text" name="zipcode" class="form-control" value="{{ request.form.get('zipcode','') }}">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-4">
+            <label>Primary Language *</label>
+            <input type="text" name="language" class="form-control" value="{{ request.form.get('language','') }}">
+          </div>
+          <div class="form-group col-md-4">
+            <label>Ethnicity *</label>
+            <input type="text" name="ethnicity" class="form-control" value="{{ request.form.get('ethnicity','') }}">
+          </div>
+          <div class="form-group col-md-4">
+            <label>Phone *</label>
+            <input type="text" name="phone" class="form-control" value="{{ request.form.get('phone','') }}">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Children Information -->
+    {% for i in [1,2,3] %}
+    <div class="card mb-4">
+      <div class="card-header gokids-header">Child {{ i }} {% if i==1 %}*{% endif %}</div>
+      <div class="card-body">
+        <div class="form-row">
+          <div class="form-group col-md-4">
+            <label>First Name *{% if i==1 %}*{% endif %}</label>
+            <input type="text" name="child{{ i }}_first_name" class="form-control" value="{{ request.form.get('child'~i~'_first_name','') }}">
+          </div>
+          <div class="form-group col-md-4">
+            <label>Last Name *{% if i==1 %}*{% endif %}</label>
+            <input type="text" name="child{{ i }}_last_name" class="form-control" value="{{ request.form.get('child'~i~'_last_name','') }}">
+          </div>
+          <div class="form-group col-md-4">
+            <label>Date of Birth *</label>
+            <input type="date" name="child{{ i }}_dob" class="form-control" value="{{ request.form.get('child'~i~'_dob','') }}">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-4">
+            <label>Gender *</label>
+            <select name="child{{ i }}_gender" class="form-control">
+              <option value="">Select</option>
+              {% for g in ['Male','Female','Other'] %}
+              <option value="{{ g }}" {% if request.form.get('child'~i~'_gender')==g %}selected{% endif %}>{{ g }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group col-md-4">
+            <label>Primary Language *</label>
+            <input type="text" name="child{{ i }}_language" class="form-control" value="{{ request.form.get('child'~i~'_language','') }}">
+          </div>
+          <div class="form-group col-md-4">
+            <label>Ethnicity *</label>
+            <input type="text" name="child{{ i }}_ethnicity" class="form-control" value="{{ request.form.get('child'~i~'_ethnicity','') }}">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-3">
+            <label>Insurance *</label>
+            <input type="text" name="child{{ i }}_insurance" class="form-control" value="{{ request.form.get('child'~i~'_insurance','') }}">
+          </div>
+          <div class="form-group col-md-3">
+            <label>Doctor visit last 6 months? *</label><br>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="child{{ i }}_doctor_visit" id="child{{ i }}_doctor_visit_yes" value="Yes" {% if request.form.get('child'~i~'_doctor_visit')=='Yes' %}checked{% endif %}>
+              <label class="form-check-label" for="child{{ i }}_doctor_visit_yes">Yes</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="child{{ i }}_doctor_visit" id="child{{ i }}_doctor_visit_no" value="No" {% if request.form.get('child'~i~'_doctor_visit')!='Yes' %}checked{% endif %}>
+              <label class="form-check-label" for="child{{ i }}_doctor_visit_no">No</label>
+            </div>
+          </div>
+          <div class="form-group col-md-3">
+            <label>Dentist visit last 6 months? *</label><br>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="child{{ i }}_dentist_visit" id="child{{ i }}_dentist_visit_yes" value="Yes" {% if request.form.get('child'~i~'_dentist_visit')=='Yes' %}checked{% endif %}>
+              <label class="form-check-label" for="child{{ i }}_dentist_visit_yes">Yes</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="child{{ i }}_dentist_visit" id="child{{ i }}_dentist_visit_no" value="No" {% if request.form.get('child'~i~'_dentist_visit')!='Yes' %}checked{% endif %}>
+              <label class="form-check-label" for="child{{ i }}_dentist_visit_no">No</label>
+            </div>
+          </div>
+          <div class="form-group col-md-3">
+            <label>Working With *</label>
+            <input type="text" name="child{{ i }}_working_with" class="form-control" value="{{ request.form.get('child'~i~'_working_with','') }}">
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+
+    <!-- Services Seeking -->
+    <div class="card mb-4">
+      <div class="card-header gokids-header">What other services is the client seeking?</div>
+      <div class="card-body">
+        <small class="form-text text-muted mb-2">(Check all that apply)</small>
+        {% set options = [
+          'Childcare',
+          'Parenting Support',
+          'Health & Wellness Services',
+          'Mental Health Support',
+          'Developmental Screenings for Child',
+          'Housing Assistance',
+          'Food Assistance',
+          'Employment Support',
+          'Legal Assistance/Immigration'
+        ] %}
+        {% for opt in options %}
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="services_seeking" id="service_{{ loop.index }}" value="{{ opt }}" {% if opt in request.form.getlist('services_seeking') %}checked{% endif %}>
+          <label class="form-check-label" for="service_{{ loop.index }}">{{ opt }}</label>
+        </div>
+        {% endfor %}
+        <div class="form-check mt-2">
+          <input class="form-check-input" type="checkbox" name="services_seeking" id="service_other" value="Other" {% if 'Other' in request.form.getlist('services_seeking') %}checked{% endif %}>
+          <label class="form-check-label" for="service_other">Other (Ex: Adult Education):</label>
+        </div>
+        <input type="text" name="services_other" class="form-control mt-2" placeholder="Please specify" value="{{ request.form.get('services_other','') }}">
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="form-group d-flex justify-content-end">
+      <button type="submit" class="btn btn-gokids mr-2">Save Client</button>
+      <a href="{{ url_for('views.home') }}" class="btn btn-secondary">Cancel</a>
+    </div>
+
+  </form>
+</div>
+{% endblock %}

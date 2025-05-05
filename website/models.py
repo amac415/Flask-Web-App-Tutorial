@@ -19,14 +19,44 @@ class User(db.Model, UserMixin):
     approved = db.Column(db.Boolean, nullable=False, default=False) 
     notes = db.relationship('Note')
 
-class Client(db.Model):
+class Parent(db.Model):
+    __tablename__ = 'parent'
     id = db.Column(db.Integer, primary_key=True)
-    child_name   = db.Column(db.String(150), nullable=False)
     parent_name  = db.Column(db.String(150), nullable=False)
-    age          = db.Column(db.Integer, nullable=False)
-    email        = db.Column(db.String(150), nullable=False)
     phone        = db.Column(db.String(50))
-    county       = db.Column(db.String(100))
-    working_with = db.Column(db.String(150))
+    email        = db.Column(db.String(150), nullable=False)
+    address      = db.Column(db.String(300), nullable=False)
+    zipcode      = db.Column(db.String(50))
+    relationship = db.Column(db.String(150))
+    language     = db.Column(db.String(150), nullable=False)
+    ethnicity    = db.Column(db.String(150), nullable=False)
+    staff_id     = db.Column(db.Integer, db.ForeignKey('user.id', name='fk_parent_user'), nullable=False)
+    staff        = db.relationship('User', backref='parents')
+    services_seeking = db.Column(db.Text)
+    
+    children      = db.relationship(
+                       'Child',
+                       backref='parent',
+                       cascade='all, delete-orphan'
+                   )
+    
+class Child(db.Model):
+    __tablename__ = 'child'
+    id                = db.Column(db.Integer, primary_key=True)
+    parent_id         = db.Column(db.Integer, db.ForeignKey('parent.id', name='fk_child_parent'), nullable=False)
+
+    first_name        = db.Column(db.String(150), nullable=False)
+    last_name         = db.Column(db.String(150), nullable=False)
+    dob               = db.Column(db.Date)
+    gender            = db.Column(db.String(10))
+    language          = db.Column(db.String(150), nullable=False)
+    ethnicity         = db.Column(db.String(150), nullable=False)
+    insurance         = db.Column(db.String(150))
+    doctor_visit      = db.Column(db.String(150))
+    dentist_visit     = db.Column(db.String(150))
+    working_with      = db.Column(db.String(150))
+    disability        = db.Column(db.String(150))
+    
+    
 
 

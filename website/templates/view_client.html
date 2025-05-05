@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Client Details{% endblock %}
+{% block content %}
+<div class="container my-5">
+  <h2>Client Details</h2>
+  <div class="card mb-4">
+    <div class="card-header bg-primary text-white">Parent Information</div>
+    <div class="card-body">
+      <p><strong>Name:</strong> {{ parent.parent_name }}</p>
+      <p><strong>Email:</strong> {{ parent.email }}</p>
+      <p><strong>Phone:</strong> {{ parent.phone or '—' }}</p>
+      <p><strong>Address:</strong> {{ parent.address }}</p>
+      <p><strong>Zip Code:</strong> {{ parent.zipcode or '—' }}</p>
+      <p><strong>Relationship to Child:</strong> {{ parent.relationship or '—' }}</p>
+      <p><strong>Primary Language:</strong> {{ parent.language }}</p>
+      <p><strong>Ethnicity:</strong> {{ parent.ethnicity }}</p>
+      <p><strong>Services Seeking:</strong> {{ parent.services_seeking or '—' }}</p>
+    </div>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-header bg-secondary text-white">Children Information</div>
+    <div class="card-body">
+      {% for child in parent.children %}
+        <div class="mb-3">
+          <h5>Child {{ loop.index }}</h5>
+          <p><strong>Name:</strong> {{ child.first_name }} {{ child.last_name }}</p>
+          <p><strong>Date of Birth:</strong> {{ child.dob.strftime('%Y-%m-%d') if child.dob else '—' }}</p>
+          <p><strong>Gender:</strong> {{ child.gender or '—' }}</p>
+          <p><strong>Primary Language:</strong> {{ child.language }}</p>
+          <p><strong>Ethnicity:</strong> {{ child.ethnicity }}</p>
+          <p><strong>Insurance:</strong> {{ child.insurance or '—' }}</p>
+          <p><strong>Doctor Visit:</strong> {{ child.doctor_visit or '—' }}</p>
+          <p><strong>Dentist Visit:</strong> {{ child.dentist_visit or '—' }}</p>
+          <p><strong>Working With:</strong> {{ child.working_with or '—' }}</p>
+          <p><strong>Disability:</strong> {{ child.disability or '—' }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <a href="{{ url_for('views.home') }}" class="btn btn-secondary">Back to Clients</a>
+</div>
+{% endblock %}
