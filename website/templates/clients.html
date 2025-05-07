@@ -34,13 +34,16 @@
   </div>
 
   <!-- Search and Add Button Row -->
-  <div class="form-row align-items-center mb-3">
+  <form method="get" action="{{ url_for('views.home') }}" class="form-row align-items-center mb-3">
     <div class="col-md-8">
       <input type="text"
              name="search"
              class="form-control"
              placeholder="Search by name, email, phone…"
              value="{{ request.args.get('search','') }}">
+    </div>
+    <div class="col-md-auto">
+      <button type="submit" class="btn btn-primary mr-2">Search</button>
     </div>
     <div class="col-md-auto ml-auto">
       <a href="{{ url_for('views.add_client') }}" class="btn btn-add">+ Add New Client</a>
@@ -67,7 +70,7 @@
           <td class="text-center">{{ parent.id }}</td>
           <td>
             {% if parent.children %}
-              {{ parent.children[0].first_name }}
+            {{ parent.children[0].first_name }} {{ parent.children[0].last_name }}
             {% else %}
               &mdash;
             {% endif %}

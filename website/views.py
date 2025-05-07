@@ -7,6 +7,7 @@ from flask import Blueprint, render_template, request, flash, jsonify, redirect,
 from werkzeug.security import generate_password_hash
 from datetime import datetime
 from .models import Parent, Child
+from sqlalchemy import or_
 
 views = Blueprint('views', __name__)
 
@@ -42,28 +43,24 @@ def settings():
 @login_required
 def home():
     if request.method == 'POST':
-        # ──── 1) Grab parent fields ──────────────────────
         parent_name  = request.form.get('parent_name')
         phone        = request.form.get('phone')
         email        = request.form.get('email')
         county       = request.form.get('county')
         working_with = request.form.get('working_with')
 
-        # Validate required parent fields:
         missing_parent = [f for f in ('parent_name','email') if not request.form.get(f)]
         if missing_parent:
             for f in missing_parent:
                 flash(f"{f.replace('_',' ').title()} is required", 'error')
             return render_template('clients.html', parents=Parent.query.all(), user=current_user)
 
-        # ──── 2) Grab child-1 fields ─────────────────────
         child1_name = request.form.get('child_name')
         child1_age  = request.form.get('age')
         if not child1_name:
             flash("Child’s name is required", 'error')
             return render_template('clients.html', parents=Parent.query.all(), user=current_user)
 
-        # ──── 3) Create Parent, then Child ──────────────
         new_parent = Parent(
             parent_name=parent_name,
             phone=phone,
@@ -73,7 +70,7 @@ def home():
             staff_id=current_user.id
         )
         db.session.add(new_parent)
-        db.session.flush()   # this assigns new_parent.id
+        db.session.flush()
 
         new_child = Child(
             parent_id=new_parent.id,
@@ -81,17 +78,34 @@ def home():
             age=int(child1_age) if child1_age and child1_age.isdigit() else None
         )
         db.session.add(new_child)
-
         db.session.commit()
+
         flash('New client and child added!', 'success')
         return redirect(url_for('views.home'))
 
-    # ──── 4) List parents based on role ─────────────
-    if current_user.role == 'admin':
-        parents = Parent.query.all()
-    else:
-        parents = Parent.query.filter_by(staff_id=current_user.id).all()
+    # ──── 4) SEARCH + List parents based on role ──────
+    search_term = request.args.get('search', '').strip()
+    ilike_term  = f"%{search_term}%"
 
+    # Start with role‐filtered base query
+    if current_user.role == 'admin':
+        base_q = Parent.query
+    else:
+        base_q = Parent.query.filter_by(staff_id=current_user.id)
+
+    # If searching, join to Child and filter on parent OR child
+    if search_term:
+        base_q = base_q.outerjoin(Child).filter(
+            or_(
+                Parent.parent_name.ilike(ilike_term),
+                Parent.email     .ilike(ilike_term),
+                Parent.phone     .ilike(ilike_term),
+                Child.first_name .ilike(ilike_term),
+                Child.last_name .ilike(ilike_term)
+            )
+        )
+
+    parents = base_q.all()
     return render_template("clients.html", parents=parents, user=current_user)
 
 
