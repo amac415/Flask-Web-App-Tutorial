@@ -11,7 +11,6 @@
       <p><strong>Phone:</strong> {{ parent.phone or '—' }}</p>
       <p><strong>Address:</strong> {{ parent.address }}</p>
       <p><strong>Zip Code:</strong> {{ parent.zipcode or '—' }}</p>
-      <p><strong>Relationship to Child:</strong> {{ parent.relationship or '—' }}</p>
       <p><strong>Primary Language:</strong> {{ parent.language }}</p>
       <p><strong>Ethnicity:</strong> {{ parent.ethnicity }}</p>
       <p><strong>Services Seeking:</strong> {{ parent.services_seeking or '—' }}</p>
@@ -33,7 +32,6 @@
           <p><strong>Doctor Visit:</strong> {{ child.doctor_visit or '—' }}</p>
           <p><strong>Dentist Visit:</strong> {{ child.dentist_visit or '—' }}</p>
           <p><strong>Working With:</strong> {{ child.working_with or '—' }}</p>
-          <p><strong>Disability:</strong> {{ child.disability or '—' }}</p>
         </div>
       {% endfor %}
     </div>
