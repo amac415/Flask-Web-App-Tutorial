@@ -12,8 +12,10 @@ def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'hjshjhdjah kjshkjdhjs'
     import os
-    app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{DB_NAME}"
+    app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres.oskwznsjywnjurlyvbbj:D52MD0ccfwWYExfH@aws-0-us-east-2.pooler.supabase.com:6543/postgres"
     db.init_app(app)
+    with app.app_context():
+        db.create_all()
 
     from .views import views
     from .auth import auth

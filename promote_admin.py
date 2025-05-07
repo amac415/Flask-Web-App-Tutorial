@@ -3,7 +3,7 @@ from website.models import User
 
 app = create_app()
 with app.app_context():
-    u = User.query.filter_by(email='andresmaciel5@gmail.com').first()
+    u = User.query.filter_by(email='gokidsdatabase@gmail.com').first()
     if not u:
         print("User not found – check the email address")
     else:
